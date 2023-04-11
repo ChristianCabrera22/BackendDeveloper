@@ -61,3 +61,4 @@ let producto = new ProductManager()
 producto.addProduct('Pure de Tomate','Extracto de tomate triturado',230,'http://pureTomate.jpg',1,20)
 producto.addProduct('Fideos','Mostacholes',150,'http://fideosMostacholes.jpg',42,20)
 console.log(producto.getProduct())
+//sd
