@@ -1,35 +1,12 @@
-const ProductManager = require("./ProductManager")
-
 const express = require("express")
-const path = require("path")
-
 const app = express()
-
-app.get("/", (req, res)=>{
-    let productNew = new ProductManager("./products.json")
-    const resp = productNew.getProducts()
-    resp.then(pr => {
-        console.log(pr)
-        let productos = JSON.parse(pr, null, 2) 
-        res.send({data:productos, menssage:"OK"})
-    }).catch(err => {
-        console.log(err)
-    })
+const routesProducts = require("./routes/products")
+const routesCart = require("./routes/cart")
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use("/static", express.static(__dirname+"/public"))
+app.use("/api/products", routesProducts)
+app.use("/api/cart", routesCart)
+app.listen(8080, ()=> {
+    console.log("Servidor en puerto 8080",)
 })
-
-app.get("/product/:id", (req, res) => {
-    let productNew = new ProductManager("./products.json")
-    let id = req.params.id
-    const resp = productNew.getProductById(id)
-    resp.then(pr => {
-        console.log(pr)
-        let productos = JSON.parse(pr, null, 2)
-        res.send({data:productos, menssge:"OK"})
-    }).catch(err => {
-        console.log(err)
-    })
-})
-
-app.listen(8080, () =>{
-    console.log("Server run on port 8080")
-}) 

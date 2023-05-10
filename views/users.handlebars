@@ -1,0 +1,9 @@
+<div>
+    <h1>Hola {{user.name}} !</h1>
+    
+    {{#if IsAdmin}}
+        <h2>Hola Admin!</h2>
+    {{else}}
+        <h2>No tienes permisos para ver la lista</h2>
+    {{/if}}
+</div>
