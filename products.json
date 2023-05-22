@@ -1,0 +1,65 @@
+[{
+    "id":1,
+    "title":"Pure de Tomate",
+    "description":"Extracto de tomate triturado",
+    "price":140,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"123",
+    "stock":25
+},
+{
+    "id":2,
+    "title":"Fideos",
+    "description":"Fideos Spaggetti",
+    "price":280,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+    
+},
+{
+    "id":3,
+    "title":"Fideos",
+    "description":"Fideos Spaggetti",
+    "price":280,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+},
+{   
+    "id":4,
+    "title":"Arroz",
+    "description":"Arroz fino",
+    "price":230,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+},
+{   
+    "id":5,
+    "title":"Cafe",
+    "description":"Torrado",
+    "price":850,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+},
+{   
+    "id":6,
+    "title":"Azucar",
+    "description":"Morena",
+    "price":280,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+},
+{   
+    "id":7,
+    "title":"Mate Cocido",
+    "description":"Taragui",
+    "price":280,
+    "thumbnail":"http://pureTomate.jpg",
+    "code":"136",
+    "stock":6
+}
+]

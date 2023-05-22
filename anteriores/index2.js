@@ -1,4 +1,4 @@
-const ProductManager = require("./ProductManager")
+const ProductManager = require("../ProductManager")
 
 const express = require("express")
 const path = require("path")
