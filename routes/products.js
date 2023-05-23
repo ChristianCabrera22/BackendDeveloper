@@ -1,23 +1,13 @@
 const express = require("express")
 const {Router} = express
 const router = Router()
-const uuid4 = require("uuid")
+const { uuid } = require('uuidv4');
 const ProductManager = require('../ProductManager')
-
-// let products = [
-//     { id: 1234, name: "Pure de tomate", price: 180},
-//     { id: 1234, name: "FIdeos", price: 250},
-//     { id: 1234, name: "Arroz", price: 80}
-// ] //db simulada
-
-// let ProductMet = new ProductManager()
-// let products = ProductMet.getProducts()
-// console.log(products)
 
 router.use(express.json())
 
-//todos los productos
-router.get('/', (req, res)=>{
+//all products
+router.get('/', (req, res)=>{ // localhost:8080/api/products
     let ProductMet = new ProductManager()
     const resp = ProductMet.getProducts()
     resp.then(pr => {
@@ -31,7 +21,7 @@ router.get('/', (req, res)=>{
 })
 
 
-router.get('/:id', (req, res)=>{
+router.get('/:id', (req, res)=>{  // localhost:8080/api/products/id (code)
     let id = req.params.id
     let ProductMet = new ProductManager()
     const resp = ProductMet.getProducts()
@@ -48,16 +38,16 @@ router.get('/:id', (req, res)=>{
 
 })
 
-router.get("/deleteProduct/:id", (req, res)=> {
+router.delete("/deleteProduct/:id", (req, res)=> { // localhost:8080/api/products/deleteProduct/id (code)
     let id = req.params.id
     let ProductMet = new ProductManager()
     ProductMet.deleteProduct(id)
     res.send({data:id, message:"Products remove"})
 })
 
-router.post('/createProduct', (req, res)=> {
+router.post('/createProduct', (req, res)=> { //localhost:8080/api/products/createProduct
     // body
-    let id = uuid4()
+    let id = uuid() //le agrega un ID automatico
     let pr = req.body
     let ProductMet = new ProductManager()
     pr.id = id
@@ -66,20 +56,28 @@ router.post('/createProduct', (req, res)=> {
 })
 
 
-// router.put("/updateProduct/:id", (req, res)=> {
-//     let id = req.params.id
-//     let infoNew = req.body
+router.put("/updateProduct/:id", (req, res)=> { // localhost:8080/api/products/updateProduct/id (code)
+    let id = req.params.id
+    let updates = req.body
+    let ProductMet = new ProductManager()
+    const resp = ProductMet.getProducts()
+    resp.then(pr => {
+        let products = JSON.parse(pr,null,2)
+        let idFound = products.find((elem)=> {
+            return elem.id == id
+        })
+        if (idFound) {
+            ProductMet.updateProduct(id,updates)
+            res.send({data:idFound, message:"Product update"})
 
-//     let arrayUpdated = products.map((ele)=>{
-//         if(ele.id == id){
-//             return {...ele, infoNew} 
-//         } else {
-//             return ele
-//         }
-//     })
-//     console.log(arrayUpdated)
-//     products = arrayUpdated
-//     res.send({data:products, message:"Products update ok"})
-// })
+
+        } else {
+            res.send({message:"Product no found"})
+        }
+
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 module.exports = router
