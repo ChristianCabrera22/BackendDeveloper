@@ -24,12 +24,6 @@ app.engine('handlebars',handlebars.engine())
 app.set('view engine','handlebars')
 app.set('views',__dirname+'/views')
 
-let message = [
-    { autor: 'asdasd', text: 'aadsdsd' },
-    { autor: 'as3123asd', text: 'a46d' },
-    { autor: '3456d', text: 'aswe23' }
-]
-
 //Init Socket in server
 io.on('connection', (socket) => {
     console.log('a user connected');
