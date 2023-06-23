@@ -1,50 +1,40 @@
-const express = require("express")
-const app = express()
-const routesProducts = require("./routes/products")
-const routesCart = require("./routes/cart")
-const realtimeproducts = require("./routes/realtimeproducts")
-const handlebars = require('express-handlebars')
-const ProductManager = require('./ProductManager')
-const PORT=8080
-const http = require('http');
-const server = http.createServer(app);
-let ProductMet = new ProductManager()
+import express from 'express';
+import handlebars from 'express-handlebars';
+import { Server } from 'socket.io';
+import { __dirname } from './__dirname.js'
+import cartsRouter from './src/routes/carts.router.js';
+import productsRouter from './src/routes/products.router.js';
+import viewsRouter from './src/routes/views.router.js';
+import './src/persistence/dbConfig.js';
 
+const app = express();
+const PORT = process.env.PORT || 8080;
 
+app.use(express.static(__dirname + '/src/public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-//Socket
-const { Server } = require("socket.io");
-const io = new Server(server);
+app.engine('handlebars', handlebars.engine());
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/src/views');
 
-//Public
-app.use(express.static(__dirname+'/public'))
+app.use('/api/carts', cartsRouter);
+app.use('/api/products', productsRouter);
+app.use('/views', viewsRouter);
 
-//Views
-app.engine('handlebars',handlebars.engine())
-app.set('view engine','handlebars')
-app.set('views',__dirname+'/views')
+const httpServer = app.listen(PORT, () => {
+    console.log(`Servidor escuchando al puerto ${PORT}.`)
+});
 
-//Init Socket in server
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    // se hace la peticion de los productos y se envia por Socket.emit
-    ProductMet.getProducts()
-    .then(pr => socket.emit('products', JSON.parse(pr)))
-    .catch(console.log);
-})
+const socketServer = new Server(httpServer);
 
-//Routes
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use("/static", express.static(__dirname+"/public"))
-app.use("/api/products", routesProducts)
-app.use("/api/cart", routesCart)
-app.use('/realtimeproducts', realtimeproducts)
-
-app.get('/', (req,res) => {
-    res.send("Bienvenido al servidor creado para el curso Backend de Coderhouse")
-})
-server.listen(PORT, ()=> {
-    console.log("Servidor en puerto 8080",)
-    console.log("Go to: localhost:8080")
+socketServer.on('connection', (socket) => {
+    console.log(`Usuario conectado con el ID ${socket.id}.`);
+    socket.emit('fetchProducts');
+    socket.on('updateProducts', () => {
+        socket.emit('fetchProducts')
+    });
+    socket.on('disconnect', () => {
+        console.log(`Usuario con ID ${socket.id} se ha desconectado.`)
+    })
 })
